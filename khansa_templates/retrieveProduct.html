@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}DK - Retrieve Product{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Product</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no product.</p>
+  {% elif count == 1 %}
+  <p>There is 1 product.</p>
+  {% else %}
+  <p>There are {{ count }} product.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Rating</th>
+        <th>Picture</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for product in product_list %}
+      <tr>
+        <td>{{ product.get_product_id() }}</td>
+        <td>{{ product.get_name() }}</td>
+        {% if product.get_category() == "F" %}
+        <td>Food</td>
+        {% elif product.get_category() == "D" %}
+        <td>Drink</td>
+        {% elif product.get_category() == "C" %}
+        <td>Clothes</td>
+        {% endif %}
+        <td>{{ product.get_price() }}</td>
+        <td>{{ product.get_rating() }}</td>
+        <td>{{ product.get_picture() }}</td>
+        <td><a href="/updateProduct/{{product.get_product_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_product', id=product.get_product_id())}}" method="POST">
+            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{product.get_name()}} {{product.get_category()}}?');">
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
